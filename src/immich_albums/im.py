@@ -179,11 +179,11 @@ class ImmichAlbums:
             skip = []
 
         if recursive:
-            for folder_name, sub_folders, filenames in os.walk(path):
-                if folder_name in skip:
-                    logger.info(f"Skipping folder: {folder_name}")
+            for folder_path, sub_folders, filenames in os.walk(path):
+                if folder_path in skip or os.path.basename(folder_path) in skip:
+                    logger.info(f"Skipping folder: {folder_path}")
                     continue
-                logger.info(f"Processing folder: {folder_name}")
+                logger.info(f"Processing folder: {folder_path}")
                 pres = self.create_album_from_folder(
                     path,
                     original_path,
@@ -194,7 +194,7 @@ class ImmichAlbums:
                 logger.info(f"Created album {pres.album_name} with {pres.added_files} files ")
 
                 for sub_folder in sub_folders:
-                    path = os.path.join(folder_name, sub_folder)
+                    path = os.path.join(folder_path, sub_folder)
                     self.create_albums_from_folder(
                         path,
                         original_path,
